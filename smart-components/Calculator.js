@@ -17,7 +17,9 @@ export default class Calculator extends Component {
 	componentWillMount() {
 		this.setState({ 
 			firstValue: null,
+			firstUnitValue: null,
 			secondValue: null,
+			secondUnitValue: null,
 			resultValue: null
 		})
 	}
@@ -27,15 +29,29 @@ export default class Calculator extends Component {
 //------------------------------------------------------------------------------
 
 	handleChange(event) {
-		this.setState({ [event.target.name] :event.target.value})
+		const { name, value } = event.target;
+		this.setState({ [name]: value})
 	}
 
-	handleClick() {
-		const first = this.state.firstValue
-		const second = this.state.secondValue
-		const resultValue = parseInt(first) + parseInt(second)
+	handleClick(unitName, unitValue) {
+		this.setState({ [unitName]: unitValue })
+
+		console.log('unitName', unitName)
+		console.log('value', unitValue)
+		
+		const { 
+			firstValue, secondValue, firstUnitValue, secondUnitValue 
+		} = this.state;
+
+		const first = firstValue * firstUnitValue;
+		const second = secondValue / secondUnitValue;
+		const resultValue = parseFloat(first) * parseFloat(second)
 		this.setState({ resultValue })
 	}
+
+//------------------------------------------------------------------------------
+// Render
+//------------------------------------------------------------------------------
 
 	render() {
 		const { firstValue, secondValue, resultValue } = this.state;
@@ -46,12 +62,14 @@ export default class Calculator extends Component {
 					value={ firstValue }
 					onClick={ this.handleClick }
 					onChange={ this.handleChange }
+					position="firstUnitValue"
 				/>
 				<UnitSelector 
 					name="secondValue"
 					value={ secondValue }
 					onClick={ this.handleClick }
 					onChange={ this.handleChange }
+					position="secondUnitValue"
 				/>
 				<Input 
 					value={ resultValue }

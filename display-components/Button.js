@@ -3,7 +3,9 @@ import React, { Component, PropTypes } from 'react'
 const propTypes = {
 	name: PropTypes.any,
 	onMouseOver: PropTypes.func,
-	selected: PropTypes.bool
+	selected: PropTypes.bool,
+	value: PropTypes.number.isRequired,
+	position: PropTypes.string.isRequired
 }
 
 const defaultProps = {
@@ -11,8 +13,18 @@ const defaultProps = {
 }
 
 export default class Button extends Component {
+	constructor() {
+		super()
+		this.handleClick = this.handleClick.bind(this);
+	}
+
+	handleClick() {
+		const { onClick, value, name, position } = this.props;
+		onClick(position, value)
+	}
+
 	render() {
-		const { selected, onClick, onSelect, onMouseOver, name } = this.props
+		const { selected, onClick, onSelect, onMouseOver, name, value } = this.props
 		return (
 			<div 
 				style={{ 
@@ -26,7 +38,7 @@ export default class Button extends Component {
 					padding: 5
 				}}
 				onMouseOver={ onMouseOver }
-				onClick={ onClick }
+				onClick={ this.handleClick }
 				onSelect={ onClick }
 			>
 				{ name }
